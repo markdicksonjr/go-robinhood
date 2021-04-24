@@ -96,7 +96,7 @@ type OptionsOrder struct {
 	Direction         string            `json:"direction"`        // e.g. "debit"/"credit"
 	ID                string            `json:"id"`
 	Legs              []OptionsOrderLeg `json:"legs"`
-	OpeningStrategy   string            `json:"opening_strategy"` // set on "open" order
+	OpeningStrategy   string            `json:"opening_strategy"` // set on "open" orde r
 	PendingQuantity   string            `json:"pending_quantity"`
 	Premium           string            `json:"premium"`
 	Price             string            `json:"price"`
@@ -115,6 +115,7 @@ type OptionsOrder struct {
 
 type ListOptionsInstrumentsParameters struct {
 	OptionInstrument
+	ExpirationDates string          `json:"expiration_dates" url:"expiration_dates"`
 }
 
 // Get info for a particular set of parameters
