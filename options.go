@@ -96,7 +96,7 @@ type OptionsOrder struct {
 	Direction         string            `json:"direction"`        // e.g. "debit"/"credit"
 	ID                string            `json:"id"`
 	Legs              []OptionsOrderLeg `json:"legs"`
-	OpeningStrategy   string            `json:"opening_strategy"` // set on "open" orde r
+	OpeningStrategy   string            `json:"opening_strategy"` // set on "open" order
 	PendingQuantity   string            `json:"pending_quantity"`
 	Premium           string            `json:"premium"`
 	Price             string            `json:"price"`
@@ -171,6 +171,18 @@ func (c *Client) GetOptionOrders(cursor *string) (*OptionsOrdersResult, error) {
 
 	var resp OptionsOrdersResult
 	err := c.getJSON(urlValue, nil, &resp)
+	if err != nil {
+		return nil, err
+	}
+
+	return &resp, nil
+}
+
+func  (c *Client) PlaceOptionsOrder(order OptionsOrder) (*OptionsOrder, error) {
+	urlValue := Endpoint + "/options/orders/"
+
+	var resp OptionsOrder
+	err := c.postForm(urlValue, &order, &resp)
 	if err != nil {
 		return nil, err
 	}

@@ -78,6 +78,27 @@ type Quote struct {
 	Instrument                  string `json:"instrument" url:"instrument"`
 }
 
+type Historicals struct {
+	Quote        string
+	Symbol       string
+	Interval     string
+	Span         string
+	Instrument   string
+	Historicals  []Historical `json:"historicals,omitempty"`
+	InstrumentID string
+}
+
+type Historical struct {
+	BeginsAt     string `json:"begins_at"'`
+	OpenPrice    string `json:"open_price"'`
+	ClosePrice   string `json:"close_price"`
+	HighPrice    string `json:"high_price"`
+	LowPrice     string `json:"low_price"`
+	Volume       int64
+	Session      string
+	Interpolated bool
+}
+
 // :path: /marketdata/options/?instruments=
 // note that a limit of 80 applies
 func (c *Client) ListOptionsMarketDataByInstrumentURLList(urlList []string) ([]OptionsQuote, error) {
@@ -93,6 +114,15 @@ func (c *Client) GetQuoteForSymbol(symbol string) (*Quote, error) {
 	err := c.getJSON(urlVal, nil, &resp)
 	return &resp, err
 }
+
+func (c *Client) GetHistoricalMarketDataForSymbol(symbol, interval, span string) (Historicals, error) {
+	urlVal := Endpoint + "/marketdata/historicals/" + symbol + "/?bounds=regular&include_inactive=true&interval=" + interval + "&span=" + span // TODO: params?
+	resp := Historicals{}
+	err := c.getJSON(urlVal, nil, &resp)
+	return resp, err
+}
+
+// https://api.robinhood.com/marketdata/historicals/BBBY/?bounds=regular&include_inactive=true&interval=1day&span=week
 
 func (c *Client) GetOptionsStrategyQuote(instruments []string, ratios []string, types []string) (*OptionsStrategyQuote, error) {
 	urlValue := Endpoint + "/marketdata/options/strategy/quotes/?instruments=" + strings.Join(instruments, ",") +

@@ -21,6 +21,7 @@ type Instrument struct {
 	FundamentalsURL    string `json:"fundamentals"`
 	QuoteURL           string `json:"quote"`
 	Symbol             string
+	ChainSymbol        string  `json:"chain_symbol"`
 	DayTradeRatio      float64 `json:"day_trade_ratio,string"`
 	Name               string
 	TradableChainID    *string `json:"tradable_chain_id"`
@@ -98,7 +99,7 @@ func (c *Client) ListInstrumentsForSymbol(symbol string) ([]*Instrument, error) 
 
 // GetInstrument fetches an instrument by its ID
 func (c *Client) GetInstrument(id string) (*Instrument, error) {
-	instruments, err := c.ListInstrumentsByIDList([]string{ id })
+	instruments, err := c.ListInstrumentsByIDList([]string{id})
 	if err != nil {
 		return nil, err
 	}
